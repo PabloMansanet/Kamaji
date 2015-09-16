@@ -1,8 +1,8 @@
 #include "scheduler.h"
 #include "timer_interrupt.h"
-#include "assert.h"
-#include "stdlib.h"
-#include "stdio.h"
+#include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 /////////////////////////
 // Mini test framework //
@@ -24,11 +24,8 @@ static void FixtureSetUp(void)
 
 static void FixtureTearDown(void)
 {
-   if (testFixture) 
-   {
-      free(testFixture);
-      testFixture = 0;
-   }
+   free(testFixture);
+   testFixture = 0;
 }
 
 //////////////////////////

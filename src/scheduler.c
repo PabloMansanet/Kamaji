@@ -1,6 +1,6 @@
 #include "scheduler.h"
-#include "assert.h"
 #include "timer_interrupt.h"
+#include <assert.h>
 #include <stddef.h>
 
 static void TriggerCallbacks(Scheduler* scheduler)
@@ -18,6 +18,7 @@ static void TriggerCallbacks(Scheduler* scheduler)
 static void SchedulerCallback(void* raw)
 {
    assert(raw);
+
    Scheduler* scheduler = (Scheduler*)raw;
    const unsigned int before = scheduler->elapsedMicroSeconds / 1000;
    scheduler->elapsedMicroSeconds += timerPeriodMicroSeconds;
@@ -32,11 +33,6 @@ void Initialize(Scheduler* scheduler)
 {
    assert(scheduler);
 
-   for (size_t i = 0; i < NumberOfCallbacks; i++)
-   {
-      scheduler->callbacks[i] = 0;
-   }
-
    scheduler->numberOfRegisteredCallbacks = 0; 
    scheduler->elapsedMicroSeconds = 0;
 
@@ -48,16 +44,17 @@ bool RegisterCallback(Scheduler* scheduler,
                       unsigned int periodInMs)
 {
    assert(scheduler);
-   const unsigned int i = scheduler->numberOfRegisteredCallbacks;
 
-   if (i >= NumberOfCallbacks)
+   const unsigned int callbackIndex = scheduler->numberOfRegisteredCallbacks;
+
+   if (callbackIndex >= NumberOfCallbacks)
       return false;
 
    if (periodInMs == 0)
       return false;
 
-   scheduler->callbacks[i] = callback;
-   scheduler->callbackPeriodsInMs[i] = periodInMs;
+   scheduler->callbacks[callbackIndex] = callback;
+   scheduler->callbackPeriodsInMs[callbackIndex] = periodInMs;
    scheduler->numberOfRegisteredCallbacks++;
    return true;
 }

@@ -9,4 +9,3 @@ set(CMAKE_C_FLAGS "-g -Wall -Wextra -Werror -std=c11 -Wstrict-prototypes -Wmissi
 
 add_subdirectory(src)
 add_subdirectory(tests)
-

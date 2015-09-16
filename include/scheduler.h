@@ -1,9 +1,11 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include "typedefs.h"
+#include <stdbool.h>
 
-enum{ NumberOfCallbacks = 10 };
+typedef void (*CallbackFunction)(void);
+
+enum { NumberOfCallbacks = 10 };
 
 typedef struct  
 {
