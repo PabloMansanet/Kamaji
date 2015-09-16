@@ -1,7 +1,7 @@
 #include "scheduler.h"
 #include "assert.h"
 #include "stdlib.h"
-
+#include "stdio.h"
 
 /////////////////////////
 // Mini test framework //
@@ -16,7 +16,7 @@ static TestFixture* testFixture = 0;
 
 static void FixtureSetUp() 
 {
-   testFixture = (TestFixture*) malloc (sizeof(testFixture));
+   testFixture = (TestFixture*) malloc (sizeof(TestFixture));
    Initialize(&testFixture->scheduler);
    testFixture->testCallbackCounter = 0;
 }
@@ -61,4 +61,5 @@ static void TEST_registering_callback_on_the_scheduler_struct()
 int main(void) 
 {
    TEST_registering_callback_on_the_scheduler_struct();
+   printf("All tests passed!\n");
 }

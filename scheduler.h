@@ -1,6 +1,8 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
+#include <stdbool.h>
+
 static const unsigned int NUMBER_OF_CALLBACKS = 10;
 typedef void (*CallbackFunction)();
 
@@ -12,8 +14,8 @@ typedef struct
 } Scheduler;
 
 void Initialize(Scheduler* scheduler);
-void RegisterCallback(Scheduler* scheduler,
-                      const CallbackFunction function,
+bool RegisterCallback(Scheduler* scheduler,
+                      const CallbackFunction callback,
                       unsigned int periodInMs);
 
 // to be called periodically by the hardware timer interrupt.

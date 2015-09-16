@@ -13,3 +13,19 @@ void Initialize(Scheduler* scheduler)
    }
    scheduler->numberOfRegisteredCallbacks = 0; 
 }
+
+bool RegisterCallback(Scheduler* scheduler,
+                      const CallbackFunction callback,
+                      unsigned int periodInMs)
+{
+   const unsigned int callbackIndex = scheduler->numberOfRegisteredCallbacks;
+   if (callbackIndex >= NUMBER_OF_CALLBACKS)
+      return false;
+
+   scheduler->callbacks[callbackIndex] = callback;
+   scheduler->callbackPeriodsInMs[callbackIndex] = periodInMs;
+   scheduler->numberOfRegisteredCallbacks++;
+   return true;
+}
+
+
