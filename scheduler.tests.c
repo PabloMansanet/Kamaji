@@ -35,13 +35,13 @@ static void FixtureTearDown()
 //        Tests         //
 //////////////////////////
 
-static void TestCallback() 
+static void TestCallback(void) 
 {
    assert(testFixture);
    testFixture->testCallbackCounter++;
 }
 
-static void TEST_registering_callback_on_the_scheduler_struct()
+static void TEST_registering_callback_on_the_scheduler_struct(void)
 {
    FixtureSetUp();
 
@@ -60,7 +60,7 @@ static void TEST_registering_callback_on_the_scheduler_struct()
    FixtureTearDown();
 }
 
-static void TEST_registering_too_many_callbacks_returns_false()
+static void TEST_registering_too_many_callbacks_returns_false(void)
 {
    FixtureSetUp();
 
@@ -68,7 +68,7 @@ static void TEST_registering_too_many_callbacks_returns_false()
    const unsigned int TestCallbackPeriodInMs = 1000;
 
    for (int callbackIndex = 0;
-        callbackIndex != NUMBER_OF_CALLBACKS;
+        callbackIndex != NumberOfCallbacks;
         callbackIndex++)
    {
       RegisterCallback(&testFixture->scheduler,
@@ -86,10 +86,36 @@ static void TEST_registering_too_many_callbacks_returns_false()
    FixtureTearDown();
 }
 
+static void TEST_calling_TIMER_ISR_enough_times_triggers_callback(void)
+{
+   FixtureSetUp();
+   
+   const unsigned int TestCallbackPeriodInMs = 1;
+  
+   // Given
+   RegisterCallback(&testFixture->scheduler,
+                    &TestCallback,
+                    TestCallbackPeriodInMs);
+   
+   for (unsigned int i = 0; i < 999; i++) 
+   {
+      TIMER_ISR();      
+   }
+   assert(testFixture->testCallbackCounter == 0);
+
+   // When
+   TIMER_ISR();
+
+   // Then
+   assert(testFixture->testCallbackCounter == 1);
+
+   FixtureTearDown();
+}
 
 int main(void) 
 {
    TEST_registering_callback_on_the_scheduler_struct();
    TEST_registering_too_many_callbacks_returns_false();
+   TEST_calling_TIMER_ISR_enough_times_triggers_callback();
    printf("All tests passed!\n");
 }

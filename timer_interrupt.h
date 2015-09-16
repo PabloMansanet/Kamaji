@@ -1,16 +1,13 @@
 #ifndef TIMER_INTERRUPT_H
 #define TIMER_INTERRUPT_H
 
-static void(*staticTimerCallback)() = 0;
+#include "typedefs.h"
 
-void TIMER_ISR_SET_CALLBACK(void(*callback)())
-{
-   staticTimerCallback = callback;
-}
+enum { timerPeriodMicroSeconds = 1 };
 
-void TIMER_ISR(void)
-{
-   if (staticTimerCallback) staticTimerCallback();
-}
+void TIMER_ISR(void);
+void TIMER_ISR_SET_CALLBACK(FatCallbackFunction callback,
+                                   void* callbackData);
+
 
 #endif //TIMER_INTERRUPT_H
