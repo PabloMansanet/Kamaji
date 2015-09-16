@@ -1,0 +1,11 @@
+*.cmake
+*.o
+bin/
+*.out
+CMakeFiles/
+Temporary/
+Makefile
+*.log
+*.so
+*.swp
+*.swo
