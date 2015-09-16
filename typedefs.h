@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-typedef void (*CallbackFunction)();
+typedef void (*CallbackFunction)(void);
 typedef void (*FatCallbackFunction)( void* data );
 
 #endif //TYPEDEFS_H

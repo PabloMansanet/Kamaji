@@ -1,7 +1,7 @@
 #include "timer_interrupt.h"
 #include <assert.h>
 
-static void NullFunction( void* data ) {}
+static void NullFunction( void* data ) { (void)data; }
 static FatCallbackFunction timerIsrCallback = NullFunction;
 static void* timerIsrCallbackData = 0;
 

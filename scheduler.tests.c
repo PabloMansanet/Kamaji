@@ -15,14 +15,14 @@ typedef struct
 
 static TestFixture* testFixture = 0;
 
-static void FixtureSetUp() 
+static void FixtureSetUp(void) 
 {
    testFixture = (TestFixture*) malloc (sizeof(TestFixture));
    Initialize(&testFixture->scheduler);
    testFixture->testCallbackCounter = 0;
 }
 
-static void FixtureTearDown()
+static void FixtureTearDown(void)
 {
    if (testFixture) 
    {

@@ -3,7 +3,7 @@
 
 #include "typedefs.h"
 
-static const unsigned int NumberOfCallbacks = 10;
+enum{ NumberOfCallbacks = 10 };
 
 typedef struct  
 {
