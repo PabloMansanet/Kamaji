@@ -1,8 +1,11 @@
 *.swp
-*.out
 *.swo
+
+*.out
+*.a
 
 bin/
 CMakeCache.txt
 *.cmake
 CMakeFiles/
+Makefile
