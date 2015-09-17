@@ -1,5 +1,5 @@
-#ifndef SCHEDULER_H
-#define SCHEDULER_H
+#ifndef TIMER_TASK_H
+#define TIMER_TASK_H
 
 #include <stdbool.h>
 
@@ -13,12 +13,12 @@ typedef struct
    unsigned int callbackPeriodsInMs[NumberOfCallbacks];
    unsigned int numberOfRegisteredCallbacks;
    unsigned int elapsedMicroSeconds;
-} Scheduler;
+} TimerTask;
 
-void Initialize(Scheduler* scheduler);
-bool RegisterCallback(Scheduler* scheduler,
+void Initialize(TimerTask* timerTask);
+bool RegisterCallback(TimerTask* timerTask,
                       CallbackFunction callback,
                       unsigned int periodInMs);
 
 
-#endif //SCHEDULER_H
+#endif //TIMER_TASK_H

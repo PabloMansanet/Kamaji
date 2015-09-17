@@ -1,2 +1,4 @@
-add_executable(tests scheduler.tests.c)
-target_link_libraries(tests scheduler timer_interrupt)
+include_directories(mocks)
+
+add_executable(tests timer_task.tests.c)
+target_link_libraries(tests timer_task timer_interrupt)
