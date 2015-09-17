@@ -123,9 +123,9 @@ void TEST_calling_task_main_triggers_queued_callback_once(void)
 
    // Given
    TimerTask_RegisterCallback(&testFixture->timerTask,
-                    &TestCallback,
-                    NULL,
-                    TestCallbackPeriodInMs);
+                              &TestCallback,
+                              NULL,
+                              TestCallbackPeriodInMs);
    testFixture->timerTask.callbackReady[0] = true;
    assert(testFixture->testCallbackCounter == 0);
 

@@ -8,6 +8,10 @@ enum { NumberOfTasks = 10 };
 
 typedef struct 
 {
+   FatCallbackFunction taskMain[NumberOfTasks];
+   void* taskRaw[NumberOfTasks];
+   unsigned int priority[NumberOfTasks];
+   unsigned int numberOfRegisteredTasks;
 } CooperativeScheduler;
 
 void CooperativeScheduler_Initialize(CooperativeScheduler* scheduler);
