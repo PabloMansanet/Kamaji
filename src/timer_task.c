@@ -9,7 +9,7 @@ static void TriggerCallbacks(TimerTask* timerTask)
    {
       if (timerTask->callbackReady[i])
       {
-         timerTask->callbacks[i]();
+         timerTask->callbacks[i](timerTask->callbackRawData[i]);
          timerTask->callbackReady[i] = false;
       }
    }
@@ -56,7 +56,8 @@ void Initialize(TimerTask* timerTask)
 }
 
 bool RegisterCallback(TimerTask* timerTask,
-                      CallbackFunction callback,
+                      FatCallbackFunction callback,
+                      void* callbackRawData,
                       unsigned int periodInMs)
 {
    assert(timerTask);
@@ -72,6 +73,7 @@ bool RegisterCallback(TimerTask* timerTask,
    timerTask->callbacks[callbackIndex] = callback;
    timerTask->callbackPeriodsInMs[callbackIndex] = periodInMs;
    timerTask->callbackReady[callbackIndex] = false;
+   timerTask->callbackRawData[callbackIndex] = callbackRawData;
    timerTask->numberOfRegisteredCallbacks++;
    return true;
 }

@@ -1,7 +1,7 @@
 #ifndef TIMER_INTERRUPT_H
 #define TIMER_INTERRUPT_H
 
-typedef void (*FatCallbackFunction)( void* data );
+#include "typedefs.h"
 
 enum { timerPeriodMicroSeconds = 1 };
 

@@ -33,8 +33,9 @@ static void FixtureTearDown(void)
 //        Tests         //
 //////////////////////////
 
-static void TestCallback(void) 
+static void TestCallback(void* raw) 
 {
+   (void)raw;
    assert(testFixture);
    testFixture->testCallbackCounter++;
 }
@@ -44,10 +45,10 @@ static void TEST_registering_callback_on_the_timerTask_struct(void)
    FixtureSetUp();
 
    //Given
-
    const unsigned int TestCallbackPeriodInMs = 1000;
    RegisterCallback(&testFixture->timerTask,
                     &TestCallback,
+                    NULL,
                     TestCallbackPeriodInMs);
    
    //Then
@@ -71,12 +72,14 @@ static void TEST_registering_too_many_callbacks_returns_false(void)
    {
       RegisterCallback(&testFixture->timerTask,
                        &TestCallback,
+                       NULL,
                        TestCallbackPeriodInMs);
    }
 
    // When
    bool registerResult = RegisterCallback(&testFixture->timerTask,
                                           &TestCallback,
+                                          NULL,
                                           TestCallbackPeriodInMs);
    // Then
    assert(!registerResult); 
@@ -93,6 +96,7 @@ static void TEST_calling_TIMER_ISR_enough_times_queues_callback(void)
    // Given
    RegisterCallback(&testFixture->timerTask,
                     &TestCallback,
+                    NULL,
                     TestCallbackPeriodInMs);
    
    for (unsigned int i = 0; i < 999; i++) 
@@ -119,6 +123,7 @@ static void TEST_calling_task_main_triggers_queued_callback_once(void)
    // Given
    RegisterCallback(&testFixture->timerTask,
                     &TestCallback,
+                    NULL,
                     TestCallbackPeriodInMs);
    testFixture->timerTask.callbackReady[0] = true;
    assert(testFixture->testCallbackCounter == 0);
