@@ -2,5 +2,6 @@
 #define COOPERATIVE_SCHEDULER_TESTS_H
 
 void TEST_running_scheduler_with_a_single_task(void);
+void TEST_running_scheduler_with_two_same_priority_tasks_cycles_calls(void);
 
 #endif //COOPERATIVE_SCHEDULER_TESTS_H

@@ -5,6 +5,7 @@ void CooperativeScheduler_Initialize(CooperativeScheduler* scheduler)
 {
    assert(scheduler);
    scheduler->numberOfRegisteredTasks = 0;
+   scheduler->taskToRunNextIndex = 0;
 }
 
 bool CooperativeScheduler_RegisterTask(CooperativeScheduler* scheduler,
@@ -28,11 +29,12 @@ bool CooperativeScheduler_RegisterTask(CooperativeScheduler* scheduler,
 
 void CooperativeScheduler_Run(CooperativeScheduler* scheduler)
 {
-   for (unsigned int taskIndex = 0;
-        taskIndex < scheduler->numberOfRegisteredTasks;
-        taskIndex++)
-   {
-      scheduler->taskMain[taskIndex](scheduler->taskRaw[taskIndex]);
-   }
+   const unsigned int taskIndex = scheduler->taskToRunNextIndex;
+   scheduler->taskMain[taskIndex](scheduler->taskRaw[taskIndex]);
+
+   const unsigned int taskToRunNextIndex = taskIndex + 1 < scheduler->numberOfRegisteredTasks ?
+                                           taskIndex + 1 :
+                                           0;
+   scheduler->taskToRunNextIndex = taskToRunNextIndex;
 }
 

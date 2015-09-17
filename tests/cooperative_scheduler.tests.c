@@ -18,7 +18,8 @@ enum
 typedef struct 
 {
    CooperativeScheduler scheduler; 
-   MockTask mockTaskLowPriority;
+   MockTask mockTaskLowPriorityA;
+   MockTask mockTaskLowPriorityB;
    MockTask mockTaskHighPriority;
 } TestFixture;
 
@@ -27,8 +28,9 @@ static TestFixture* testFixture = 0;
 static void FixtureSetUp(void) 
 {
    testFixture = (TestFixture*) malloc (sizeof(TestFixture));
+   MockTask_Initialize(&testFixture->mockTaskLowPriorityA);
+   MockTask_Initialize(&testFixture->mockTaskLowPriorityB);
    MockTask_Initialize(&testFixture->mockTaskHighPriority);
-   MockTask_Initialize(&testFixture->mockTaskLowPriority);
    CooperativeScheduler_Initialize(&testFixture->scheduler);
 }
 
@@ -58,6 +60,45 @@ void TEST_running_scheduler_with_a_single_task(void)
 
    // Then 
    assert(testFixture->mockTaskHighPriority.timesTaskMainCalled == 1);
+
+   FixtureTearDown();
+}
+
+void TEST_running_scheduler_with_two_same_priority_tasks_cycles_calls(void)
+{
+   FixtureSetUp();
+   
+   // Given
+   CooperativeScheduler_RegisterTask(&testFixture->scheduler,
+                                     MockTask_TaskMain,
+                                     &testFixture->mockTaskLowPriorityA,
+                                     LowPriority);
+   CooperativeScheduler_RegisterTask(&testFixture->scheduler,
+                                     MockTask_TaskMain,
+                                     &testFixture->mockTaskLowPriorityB,
+                                     LowPriority);
+
+   // When
+   CooperativeScheduler_Run(&testFixture->scheduler);
+
+   // Then
+   assert(testFixture->mockTaskLowPriorityA.timesTaskMainCalled == 1);
+   assert(testFixture->mockTaskLowPriorityB.timesTaskMainCalled == 0);
+   
+   // When
+   CooperativeScheduler_Run(&testFixture->scheduler);
+
+   // Then
+   assert(testFixture->mockTaskLowPriorityA.timesTaskMainCalled == 1);
+   assert(testFixture->mockTaskLowPriorityB.timesTaskMainCalled == 1);
+
+   // When
+   CooperativeScheduler_Run(&testFixture->scheduler);
+
+   // Then
+   assert(testFixture->mockTaskLowPriorityA.timesTaskMainCalled == 2);
+   assert(testFixture->mockTaskLowPriorityB.timesTaskMainCalled == 1);
+
 
    FixtureTearDown();
 }
