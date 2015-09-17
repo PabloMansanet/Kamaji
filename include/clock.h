@@ -8,12 +8,12 @@ typedef struct
    unsigned int seconds;
 } Clock;
 
-void ElapseSecondCallback(void* raw);
+void Clock_ElapseSecondCallback(void* raw);
 
-void ElapseSecond(Clock* clock);
-void ElapseMinute(Clock* clock);
-void ElapseHour(Clock* clock);
+void Clock_ElapseSecond(Clock* clock);
+void Clock_ElapseMinute(Clock* clock);
+void Clock_ElapseHour(Clock* clock);
 
-void ResetToMidnight(Clock* clock);
+void Clock_ResetToMidnight(Clock* clock);
 
 #endif //CLOCK_H
