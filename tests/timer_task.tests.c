@@ -19,7 +19,7 @@ static TestFixture* testFixture = 0;
 static void FixtureSetUp(void) 
 {
    testFixture = (TestFixture*) malloc (sizeof(TestFixture));
-   Initialize(&testFixture->timerTask);
+   TimerTask_Initialize(&testFixture->timerTask);
    testFixture->testCallbackCounter = 0;
 }
 
@@ -46,7 +46,7 @@ static void TEST_registering_callback_on_the_timerTask_struct(void)
 
    //Given
    const unsigned int TestCallbackPeriodInMs = 1000;
-   RegisterCallback(&testFixture->timerTask,
+   TimerTask_RegisterCallback(&testFixture->timerTask,
                     &TestCallback,
                     NULL,
                     TestCallbackPeriodInMs);
@@ -70,17 +70,17 @@ static void TEST_registering_too_many_callbacks_returns_false(void)
         callbackIndex != NumberOfCallbacks;
         callbackIndex++)
    {
-      RegisterCallback(&testFixture->timerTask,
-                       &TestCallback,
-                       NULL,
-                       TestCallbackPeriodInMs);
+      TimerTask_RegisterCallback(&testFixture->timerTask,
+                                 &TestCallback,
+                                 NULL,
+                                 TestCallbackPeriodInMs);
    }
 
    // When
-   bool registerResult = RegisterCallback(&testFixture->timerTask,
-                                          &TestCallback,
-                                          NULL,
-                                          TestCallbackPeriodInMs);
+   bool registerResult = TimerTask_RegisterCallback(&testFixture->timerTask,
+                                                    &TestCallback,
+                                                    NULL,
+                                                    TestCallbackPeriodInMs);
    // Then
    assert(!registerResult); 
 
@@ -94,7 +94,7 @@ static void TEST_calling_TIMER_ISR_enough_times_queues_callback(void)
    const unsigned int TestCallbackPeriodInMs = 1;
   
    // Given
-   RegisterCallback(&testFixture->timerTask,
+   TimerTask_RegisterCallback(&testFixture->timerTask,
                     &TestCallback,
                     NULL,
                     TestCallbackPeriodInMs);
@@ -121,7 +121,7 @@ static void TEST_calling_task_main_triggers_queued_callback_once(void)
    const unsigned int TestCallbackPeriodInMs = 1;
 
    // Given
-   RegisterCallback(&testFixture->timerTask,
+   TimerTask_RegisterCallback(&testFixture->timerTask,
                     &TestCallback,
                     NULL,
                     TestCallbackPeriodInMs);
@@ -129,7 +129,7 @@ static void TEST_calling_task_main_triggers_queued_callback_once(void)
    assert(testFixture->testCallbackCounter == 0);
 
    // When
-   TaskMain(&testFixture->timerTask);
+   TimerTask_TaskMain(&testFixture->timerTask);
 
    // Then
    assert(testFixture->testCallbackCounter == 1);

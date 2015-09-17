@@ -1,14 +1,14 @@
 #include "clock.h"
 #include <assert.h>
 
-void ElapseSecondCallback(void* raw)
+void Clock_ElapseSecondCallback(void* raw)
 {
    assert(raw);
    Clock* clock = (Clock*) raw;
-   ElapseSecond(clock);
+   Clock_ElapseSecond(clock);
 }
 
-void ElapseHour(Clock* clock)
+void Clock_ElapseHour(Clock* clock)
 {
    assert(clock);
    if (clock->hours < 23)
@@ -21,7 +21,7 @@ void ElapseHour(Clock* clock)
    }
 }
 
-void ElapseMinute(Clock* clock)
+void Clock_ElapseMinute(Clock* clock)
 {
    assert(clock);
    if (clock->minutes < 59)
@@ -31,11 +31,11 @@ void ElapseMinute(Clock* clock)
    else
    {
       clock->minutes = 0;
-      ElapseHour(clock);
+      Clock_ElapseHour(clock);
    }
 }
 
-void ElapseSecond(Clock* clock)
+void Clock_ElapseSecond(Clock* clock)
 {
    assert(clock);
 
@@ -46,11 +46,11 @@ void ElapseSecond(Clock* clock)
    else
    {
       clock->seconds = 0;
-      ElapseMinute(clock);
+      Clock_ElapseMinute(clock);
    }
 }
 
-void ResetToMidnight(Clock* clock)
+void Clock_ResetToMidnight(Clock* clock)
 {
    assert(clock);
    clock->seconds = 0;

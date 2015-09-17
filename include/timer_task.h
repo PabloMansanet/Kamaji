@@ -18,11 +18,11 @@ typedef struct
    unsigned int elapsedMicroSeconds;
 } TimerTask;
 
-void Initialize(TimerTask* timerTask);
-bool RegisterCallback(TimerTask* timerTask,
-                      FatCallbackFunction callback,
-                      void* callbackRawData,
-                      unsigned int periodInMs);
-void TaskMain(TimerTask* timerTask);
+void TimerTask_Initialize(TimerTask* timerTask);
+bool TimerTask_RegisterCallback(TimerTask* timerTask,
+                                FatCallbackFunction callback,
+                                void* callbackRawData,
+                                unsigned int periodInMs);
+void TimerTask_TaskMain(TimerTask* timerTask);
 
 #endif //TIMER_TASK_H

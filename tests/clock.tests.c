@@ -19,7 +19,7 @@ static TestFixture* testFixture = 0;
 static void FixtureSetUp(void) 
 {
    testFixture = (TestFixture*) malloc (sizeof(TestFixture));
-   ResetToMidnight(&testFixture->clock);
+   Clock_ResetToMidnight(&testFixture->clock);
 }
 
 static void FixtureTearDown(void)
@@ -42,7 +42,7 @@ static void TEST_elapsing_a_second_on_a_freshy_reset_clock(void)
    assert(testFixture->clock.seconds == 0);
 
    // When
-   ElapseSecond(&testFixture->clock);
+   Clock_ElapseSecond(&testFixture->clock);
   
    // Then
    assert(testFixture->clock.seconds == 1);
@@ -57,13 +57,13 @@ static void TEST_elapsing_a_minute_via_seconds(void)
    // Given
    for (int i = 0; i < 59; i++) 
    {
-      ElapseSecond(&testFixture->clock);
+      Clock_ElapseSecond(&testFixture->clock);
    }
    assert(testFixture->clock.seconds == 59);
    assert(testFixture->clock.minutes == 0);
 
    // When
-   ElapseSecond(&testFixture->clock);
+   Clock_ElapseSecond(&testFixture->clock);
 
    // Then
    assert(testFixture->clock.seconds == 0);
@@ -79,13 +79,13 @@ static void TEST_elapsing_an_hour_via_minutes(void)
    // Given
    for (int i = 0; i < 59; i++) 
    {
-      ElapseMinute(&testFixture->clock);
+      Clock_ElapseMinute(&testFixture->clock);
    }
    assert(testFixture->clock.minutes == 59);
    assert(testFixture->clock.hours == 0);
 
    // When
-   ElapseMinute(&testFixture->clock);
+   Clock_ElapseMinute(&testFixture->clock);
 
    // Then
    assert(testFixture->clock.minutes == 0);

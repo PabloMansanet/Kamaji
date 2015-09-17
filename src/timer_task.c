@@ -15,7 +15,7 @@ static void TriggerCallbacks(TimerTask* timerTask)
    }
 }
 
-void TaskMain(TimerTask* timerTask)
+void TimerTask_TaskMain(TimerTask* timerTask)
 {
    TriggerCallbacks(timerTask);
 }
@@ -45,7 +45,7 @@ static void TimerTaskCallback(void* raw)
       QueueCallbacks(timerTask);
 }
 
-void Initialize(TimerTask* timerTask)
+void TimerTask_Initialize(TimerTask* timerTask)
 {
    assert(timerTask);
 
@@ -55,10 +55,10 @@ void Initialize(TimerTask* timerTask)
    TIMER_ISR_SET_CALLBACK(TimerTaskCallback, timerTask);
 }
 
-bool RegisterCallback(TimerTask* timerTask,
-                      FatCallbackFunction callback,
-                      void* callbackRawData,
-                      unsigned int periodInMs)
+bool TimerTask_RegisterCallback(TimerTask* timerTask,
+                                FatCallbackFunction callback,
+                                void* callbackRawData,
+                                unsigned int periodInMs)
 {
    assert(timerTask);
 

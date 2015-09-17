@@ -20,8 +20,8 @@ static TestFixture* testFixture = 0;
 static void FixtureSetUp(void) 
 {
    testFixture = (TestFixture*) malloc (sizeof(TestFixture));
-   Initialize(&testFixture->timerTask);
-   ResetToMidnight(&testFixture->clock);
+   TimerTask_Initialize(&testFixture->timerTask);
+   Clock_ResetToMidnight(&testFixture->clock);
 }
 
 static void FixtureTearDown(void)
@@ -41,8 +41,8 @@ static void TEST_clock_is_updated_through_timer_interrupt(void)
    // Given
    const unsigned int OneSecondInMS = 1000;
    const unsigned int OneSecondInMicroSeconds = 1000000;
-   RegisterCallback(&testFixture->timerTask,
-                    ElapseSecondCallback,
+   TimerTask_RegisterCallback(&testFixture->timerTask,
+                    Clock_ElapseSecondCallback,
                     &testFixture->clock,
                     OneSecondInMS);
                     
@@ -52,7 +52,7 @@ static void TEST_clock_is_updated_through_timer_interrupt(void)
    for (unsigned int i = 0; i < OneSecondInMicroSeconds; i++)
    {
       TIMER_ISR();
-      TaskMain(&testFixture->timerTask);
+      TimerTask_TaskMain(&testFixture->timerTask);
    }
 
    // Then
