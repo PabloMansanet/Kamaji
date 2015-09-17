@@ -5,12 +5,29 @@
 
 static void TriggerCallbacks(TimerTask* timerTask)
 {
+   for (size_t i = 0; i < timerTask->numberOfRegisteredCallbacks; i++)
+   {
+      if (timerTask->callbackReady[i])
+      {
+         timerTask->callbacks[i]();
+         timerTask->callbackReady[i] = false;
+      }
+   }
+}
+
+void TaskMain(TimerTask* timerTask)
+{
+   TriggerCallbacks(timerTask);
+}
+
+static void QueueCallbacks(TimerTask* timerTask)
+{
    const unsigned int elapsedMilliSeconds = timerTask->elapsedMicroSeconds / 1000;
    for (size_t i = 0; i < timerTask->numberOfRegisteredCallbacks; i++)
    {
       if (elapsedMilliSeconds % timerTask->callbackPeriodsInMs[i] == 0)
       {
-         timerTask->callbacks[i]();
+         timerTask->callbackReady[i] = true;
       }
    }
 }
@@ -25,9 +42,8 @@ static void TimerTaskCallback(void* raw)
    const unsigned int after = timerTask->elapsedMicroSeconds / 1000;
    
    if (before != after)
-      TriggerCallbacks(timerTask);
+      QueueCallbacks(timerTask);
 }
-
 
 void Initialize(TimerTask* timerTask)
 {
@@ -55,6 +71,7 @@ bool RegisterCallback(TimerTask* timerTask,
 
    timerTask->callbacks[callbackIndex] = callback;
    timerTask->callbackPeriodsInMs[callbackIndex] = periodInMs;
+   timerTask->callbackReady[callbackIndex] = false;
    timerTask->numberOfRegisteredCallbacks++;
    return true;
 }

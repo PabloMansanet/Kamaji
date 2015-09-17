@@ -5,7 +5,9 @@
 *.a
 
 bin/
+tags/
+
+CMakeFiles/
 CMakeCache.txt
 *.cmake
-CMakeFiles/
 Makefile

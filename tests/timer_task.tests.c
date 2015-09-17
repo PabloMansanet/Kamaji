@@ -84,7 +84,7 @@ static void TEST_registering_too_many_callbacks_returns_false(void)
    FixtureTearDown();
 }
 
-static void TEST_calling_TIMER_ISR_enough_times_triggers_callback(void)
+static void TEST_calling_TIMER_ISR_enough_times_queues_callback(void)
 {
    FixtureSetUp();
    
@@ -99,13 +99,36 @@ static void TEST_calling_TIMER_ISR_enough_times_triggers_callback(void)
    {
       TIMER_ISR();      
    }
-   assert(testFixture->testCallbackCounter == 0);
+   assert(testFixture->timerTask.callbackReady[0] == false);
 
    // When
    TIMER_ISR();
 
    // Then
+   assert(testFixture->timerTask.callbackReady[0] == true);
+
+   FixtureTearDown();
+}
+
+static void TEST_calling_task_main_triggers_queued_callback_once(void)
+{
+   FixtureSetUp();
+   
+   const unsigned int TestCallbackPeriodInMs = 1;
+
+   // Given
+   RegisterCallback(&testFixture->timerTask,
+                    &TestCallback,
+                    TestCallbackPeriodInMs);
+   testFixture->timerTask.callbackReady[0] = true;
+   assert(testFixture->testCallbackCounter == 0);
+
+   // When
+   TaskMain(&testFixture->timerTask);
+
+   // Then
    assert(testFixture->testCallbackCounter == 1);
+   assert(testFixture->timerTask.callbackReady[0] == false);
 
    FixtureTearDown();
 }
@@ -114,6 +137,7 @@ int main(void)
 {
    TEST_registering_callback_on_the_timerTask_struct();
    TEST_registering_too_many_callbacks_returns_false();
-   TEST_calling_TIMER_ISR_enough_times_triggers_callback();
+   TEST_calling_TIMER_ISR_enough_times_queues_callback();
+   TEST_calling_task_main_triggers_queued_callback_once();
    printf("All tests passed!\n");
 }
