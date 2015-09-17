@@ -1,4 +1,5 @@
 #include "clock.h"
+#include "clock.tests.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -32,7 +33,7 @@ static void FixtureTearDown(void)
 //        Tests         //
 //////////////////////////
 
-static void TEST_elapsing_a_second_on_a_freshy_reset_clock(void) 
+void TEST_elapsing_a_second_on_a_freshy_reset_clock(void) 
 {
    FixtureSetUp();
   
@@ -50,7 +51,7 @@ static void TEST_elapsing_a_second_on_a_freshy_reset_clock(void)
    FixtureTearDown();
 }
 
-static void TEST_elapsing_a_minute_via_seconds(void)
+void TEST_elapsing_a_minute_via_seconds(void)
 {
    FixtureSetUp();
 
@@ -72,7 +73,7 @@ static void TEST_elapsing_a_minute_via_seconds(void)
    FixtureTearDown();
 }
 
-static void TEST_elapsing_an_hour_via_minutes(void)
+void TEST_elapsing_an_hour_via_minutes(void)
 {
    FixtureSetUp();
   
@@ -92,13 +93,4 @@ static void TEST_elapsing_an_hour_via_minutes(void)
    assert(testFixture->clock.hours == 1);
 
    FixtureTearDown();
-}
-
-
-int main(void) 
-{
-   TEST_elapsing_a_second_on_a_freshy_reset_clock();
-   TEST_elapsing_a_minute_via_seconds();
-   TEST_elapsing_an_hour_via_minutes();
-   printf("All tests passed!\n");
 }

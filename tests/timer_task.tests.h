@@ -1,0 +1,9 @@
+#ifndef TIMER_TASK_TESTS_H
+#define TIMER_TASK_TESTS_H
+
+void TEST_registering_callback_on_the_timerTask_struct(void);
+void TEST_registering_too_many_callbacks_returns_false(void);
+void TEST_calling_TIMER_ISR_enough_times_queues_callback(void);
+void TEST_calling_task_main_triggers_queued_callback_once(void);
+
+#endif
