@@ -23,6 +23,6 @@ bool TimerTask_RegisterCallback(TimerTask* timerTask,
                                 FatCallbackFunction callback,
                                 void* callbackRawData,
                                 unsigned int periodInMs);
-void TimerTask_TaskMain(TimerTask* timerTask);
+void TimerTask_TaskMain(void* timerTaskRaw);
 
 #endif //TIMER_TASK_H

@@ -15,8 +15,10 @@ static void TriggerCallbacks(TimerTask* timerTask)
    }
 }
 
-void TimerTask_TaskMain(TimerTask* timerTask)
+void TimerTask_TaskMain(void* timerTaskRaw)
 {
+   assert(timerTaskRaw);
+   TimerTask* timerTask = (TimerTask*)timerTaskRaw;
    TriggerCallbacks(timerTask);
 }
 

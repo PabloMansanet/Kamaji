@@ -1,6 +1,7 @@
 #include "clock.tests.h"
 #include "full_system.tests.h"
 #include "timer_task.tests.h"
+#include "cooperative_scheduler.tests.h"
 #include <stdio.h>
 
 int main(void)
@@ -15,6 +16,9 @@ int main(void)
    TEST_registering_too_many_callbacks_returns_false();
    TEST_calling_TIMER_ISR_enough_times_queues_callback();
    TEST_calling_task_main_triggers_queued_callback_once();
+
+   // Cooperative scheduler tests
+   TEST_running_scheduler_with_a_single_task();
 
    // System tests
    TEST_clock_is_updated_through_timer_interrupt();
