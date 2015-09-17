@@ -1,5 +1,7 @@
 #include "timer_task.h"
 #include "timer_interrupt.h"
+#include "full_system.tests.h"
+
 #include "clock.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -34,7 +36,7 @@ static void FixtureTearDown(void)
 //        Tests         //
 //////////////////////////
 
-static void TEST_clock_is_updated_through_timer_interrupt(void)
+void TEST_clock_is_updated_through_timer_interrupt(void)
 {
    FixtureSetUp();
 
@@ -59,10 +61,4 @@ static void TEST_clock_is_updated_through_timer_interrupt(void)
    assert(testFixture->clock.seconds == 1);
 
    FixtureTearDown();
-}
-
-int main(void)
-{
-   TEST_clock_is_updated_through_timer_interrupt();
-   printf("All system tests passed!\n");
 }

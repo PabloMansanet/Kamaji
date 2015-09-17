@@ -1,5 +1,6 @@
 #include "timer_task.h"
 #include "timer_interrupt.h"
+#include "timer_task.tests.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -40,7 +41,7 @@ static void TestCallback(void* raw)
    testFixture->testCallbackCounter++;
 }
 
-static void TEST_registering_callback_on_the_timerTask_struct(void)
+void TEST_registering_callback_on_the_timerTask_struct(void)
 {
    FixtureSetUp();
 
@@ -59,7 +60,7 @@ static void TEST_registering_callback_on_the_timerTask_struct(void)
    FixtureTearDown();
 }
 
-static void TEST_registering_too_many_callbacks_returns_false(void)
+void TEST_registering_too_many_callbacks_returns_false(void)
 {
    FixtureSetUp();
 
@@ -87,7 +88,7 @@ static void TEST_registering_too_many_callbacks_returns_false(void)
    FixtureTearDown();
 }
 
-static void TEST_calling_TIMER_ISR_enough_times_queues_callback(void)
+void TEST_calling_TIMER_ISR_enough_times_queues_callback(void)
 {
    FixtureSetUp();
    
@@ -114,7 +115,7 @@ static void TEST_calling_TIMER_ISR_enough_times_queues_callback(void)
    FixtureTearDown();
 }
 
-static void TEST_calling_task_main_triggers_queued_callback_once(void)
+void TEST_calling_task_main_triggers_queued_callback_once(void)
 {
    FixtureSetUp();
    
@@ -136,13 +137,4 @@ static void TEST_calling_task_main_triggers_queued_callback_once(void)
    assert(testFixture->timerTask.callbackReady[0] == false);
 
    FixtureTearDown();
-}
-
-int main(void) 
-{
-   TEST_registering_callback_on_the_timerTask_struct();
-   TEST_registering_too_many_callbacks_returns_false();
-   TEST_calling_TIMER_ISR_enough_times_queues_callback();
-   TEST_calling_task_main_triggers_queued_callback_once();
-   printf("All tests passed!\n");
 }
