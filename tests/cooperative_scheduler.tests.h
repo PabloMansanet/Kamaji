@@ -5,5 +5,6 @@ void TEST_running_scheduler_with_a_single_task(void);
 void TEST_running_scheduler_with_two_same_priority_tasks_cycles_calls(void);
 void TEST_putting_task_to_sleep_stops_it_from_being_scheduled(void);
 void TEST_waking_task_up_after_sleep_puts_it_back_on_schedule(void);
+void TEST_higher_priority_task_will_always_run_over_lower_priority_tasks(void);
 
 #endif //COOPERATIVE_SCHEDULER_TESTS_H

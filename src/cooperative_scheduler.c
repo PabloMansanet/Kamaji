@@ -84,7 +84,7 @@ bool CooperativeScheduler_TaskSleep(CooperativeScheduler* scheduler,
 bool CooperativeScheduler_TaskWakeUp(CooperativeScheduler* scheduler,
                                      void* taskRaw)
 {
-   (void) scheduler;
-   (void) taskRaw;
-   return false;
+   assert(scheduler);
+   assert(taskRaw);
+   return SetTaskState(scheduler, taskRaw, Awake);
 }

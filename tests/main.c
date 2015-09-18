@@ -22,6 +22,7 @@ int main(void)
    TEST_running_scheduler_with_two_same_priority_tasks_cycles_calls();
    TEST_putting_task_to_sleep_stops_it_from_being_scheduled();
    TEST_waking_task_up_after_sleep_puts_it_back_on_schedule();
+   TEST_higher_priority_task_will_always_run_over_lower_priority_tasks();
 
    // System tests
    TEST_clock_is_updated_through_timer_interrupt();
