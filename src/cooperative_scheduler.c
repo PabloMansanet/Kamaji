@@ -14,6 +14,8 @@ bool CooperativeScheduler_RegisterTask(CooperativeScheduler* scheduler,
                                        unsigned int priority)
 {
    assert(scheduler); 
+   assert(taskRaw);
+
    unsigned int taskIndex = scheduler->numberOfRegisteredTasks;
    
    if (taskIndex >= NumberOfTasks)
@@ -22,6 +24,7 @@ bool CooperativeScheduler_RegisterTask(CooperativeScheduler* scheduler,
    scheduler->taskMain[taskIndex] = taskMain;
    scheduler->taskRaw[taskIndex] = taskRaw;
    scheduler->priority[taskIndex] = priority;
+   scheduler->taskState[taskIndex] = Awake;
    scheduler->numberOfRegisteredTasks++;
 
    return true;
@@ -36,5 +39,18 @@ void CooperativeScheduler_Run(CooperativeScheduler* scheduler)
                                            taskIndex + 1 :
                                            0;
    scheduler->taskToRunNextIndex = taskToRunNextIndex;
+}
+
+void CooperativeScheduler_TaskSleep(CooperativeScheduler* scheduler,
+                                    void* taskRaw)
+{
+   assert(scheduler);
+   assert(taskRaw);
+
+   for (unsigned int i = 0; i < scheduler->numberOfRegisteredTasks; i++)
+   {
+      if (taskRaw == scheduler->taskRaw[i])
+         scheduler->taskState[i] = Asleep;
+   }
 }
 

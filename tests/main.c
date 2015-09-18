@@ -20,6 +20,7 @@ int main(void)
    // Cooperative scheduler tests
    TEST_running_scheduler_with_a_single_task();
    TEST_running_scheduler_with_two_same_priority_tasks_cycles_calls();
+   TEST_putting_task_to_sleep_stops_it_from_being_scheduled();
 
    // System tests
    TEST_clock_is_updated_through_timer_interrupt();

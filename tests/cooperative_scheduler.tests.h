@@ -3,5 +3,6 @@
 
 void TEST_running_scheduler_with_a_single_task(void);
 void TEST_running_scheduler_with_two_same_priority_tasks_cycles_calls(void);
+void TEST_putting_task_to_sleep_stops_it_from_being_scheduled(void);
 
 #endif //COOPERATIVE_SCHEDULER_TESTS_H

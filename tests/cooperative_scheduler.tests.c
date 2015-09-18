@@ -18,8 +18,8 @@ enum
 typedef struct 
 {
    CooperativeScheduler scheduler; 
-   MockTask mockTaskLowPriorityA;
-   MockTask mockTaskLowPriorityB;
+   MockTask alpha_mockTaskLowPriority;
+   MockTask beta_mockTaskLowPriority;
    MockTask mockTaskHighPriority;
 } TestFixture;
 
@@ -28,8 +28,8 @@ static TestFixture* testFixture = 0;
 static void FixtureSetUp(void) 
 {
    testFixture = (TestFixture*) malloc (sizeof(TestFixture));
-   MockTask_Initialize(&testFixture->mockTaskLowPriorityA);
-   MockTask_Initialize(&testFixture->mockTaskLowPriorityB);
+   MockTask_Initialize(&testFixture->alpha_mockTaskLowPriority);
+   MockTask_Initialize(&testFixture->beta_mockTaskLowPriority);
    MockTask_Initialize(&testFixture->mockTaskHighPriority);
    CooperativeScheduler_Initialize(&testFixture->scheduler);
 }
@@ -43,6 +43,18 @@ static void FixtureTearDown(void)
 //////////////////////////
 //        Tests         //
 //////////////////////////
+
+static void HELPER_register_two_low_priority_tasks(void)
+{
+   CooperativeScheduler_RegisterTask(&testFixture->scheduler,
+                                     MockTask_TaskMain,
+                                     &testFixture->alpha_mockTaskLowPriority,
+                                     LowPriority);
+   CooperativeScheduler_RegisterTask(&testFixture->scheduler,
+                                     MockTask_TaskMain,
+                                     &testFixture->beta_mockTaskLowPriority,
+                                     LowPriority);
+}
 
 void TEST_running_scheduler_with_a_single_task(void)
 {
@@ -69,36 +81,49 @@ void TEST_running_scheduler_with_two_same_priority_tasks_cycles_calls(void)
    FixtureSetUp();
    
    // Given
-   CooperativeScheduler_RegisterTask(&testFixture->scheduler,
-                                     MockTask_TaskMain,
-                                     &testFixture->mockTaskLowPriorityA,
-                                     LowPriority);
-   CooperativeScheduler_RegisterTask(&testFixture->scheduler,
-                                     MockTask_TaskMain,
-                                     &testFixture->mockTaskLowPriorityB,
-                                     LowPriority);
+   HELPER_register_two_low_priority_tasks();
 
    // When
    CooperativeScheduler_Run(&testFixture->scheduler);
 
    // Then
-   assert(testFixture->mockTaskLowPriorityA.timesTaskMainCalled == 1);
-   assert(testFixture->mockTaskLowPriorityB.timesTaskMainCalled == 0);
+   assert(testFixture->alpha_mockTaskLowPriority.timesTaskMainCalled == 1);
+   assert(testFixture->beta_mockTaskLowPriority.timesTaskMainCalled == 0);
    
    // When
    CooperativeScheduler_Run(&testFixture->scheduler);
 
    // Then
-   assert(testFixture->mockTaskLowPriorityA.timesTaskMainCalled == 1);
-   assert(testFixture->mockTaskLowPriorityB.timesTaskMainCalled == 1);
+   assert(testFixture->alpha_mockTaskLowPriority.timesTaskMainCalled == 1);
+   assert(testFixture->beta_mockTaskLowPriority.timesTaskMainCalled == 1);
 
    // When
    CooperativeScheduler_Run(&testFixture->scheduler);
 
    // Then
-   assert(testFixture->mockTaskLowPriorityA.timesTaskMainCalled == 2);
-   assert(testFixture->mockTaskLowPriorityB.timesTaskMainCalled == 1);
+   assert(testFixture->alpha_mockTaskLowPriority.timesTaskMainCalled == 2);
+   assert(testFixture->beta_mockTaskLowPriority.timesTaskMainCalled == 1);
 
 
    FixtureTearDown();
+}
+
+
+void TEST_putting_task_to_sleep_stops_it_from_being_scheduled(void)
+{
+   // Given
+   HELPER_register_two_low_priority_tasks();
+
+   // When
+   CooperativeScheduler_TaskSleep(&testFixture->scheduler,
+                                  &testFixture->alpha_mockTaskLowPriority);
+
+   // Then
+   CooperativeScheduler_Run(&testFixture->scheduler);
+   assert(testFixture->alpha_mockTaskLowPriority.timesTaskMainCalled == 0);
+   assert(testFixture->beta_mockTaskLowPriority.timesTaskMainCalled == 1);
+
+   CooperativeScheduler_Run(&testFixture->scheduler);
+   assert(testFixture->alpha_mockTaskLowPriority.timesTaskMainCalled == 0);
+   assert(testFixture->beta_mockTaskLowPriority.timesTaskMainCalled == 2);
 }
