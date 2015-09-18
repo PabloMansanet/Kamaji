@@ -104,13 +104,14 @@ void TEST_running_scheduler_with_two_same_priority_tasks_cycles_calls(void)
    assert(testFixture->alpha_mockTaskLowPriority.timesTaskMainCalled == 2);
    assert(testFixture->beta_mockTaskLowPriority.timesTaskMainCalled == 1);
 
-
    FixtureTearDown();
 }
 
 
 void TEST_putting_task_to_sleep_stops_it_from_being_scheduled(void)
 {
+   FixtureSetUp();
+
    // Given
    HELPER_register_two_low_priority_tasks();
 
@@ -126,4 +127,6 @@ void TEST_putting_task_to_sleep_stops_it_from_being_scheduled(void)
    CooperativeScheduler_Run(&testFixture->scheduler);
    assert(testFixture->alpha_mockTaskLowPriority.timesTaskMainCalled == 0);
    assert(testFixture->beta_mockTaskLowPriority.timesTaskMainCalled == 2);
+
+   FixtureTearDown();
 }

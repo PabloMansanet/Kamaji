@@ -30,15 +30,30 @@ bool CooperativeScheduler_RegisterTask(CooperativeScheduler* scheduler,
    return true;
 }
 
-void CooperativeScheduler_Run(CooperativeScheduler* scheduler)
+static void UpdateTaskToRunNext(CooperativeScheduler* scheduler)
 {
-   const unsigned int taskIndex = scheduler->taskToRunNextIndex;
-   scheduler->taskMain[taskIndex](scheduler->taskRaw[taskIndex]);
-
-   const unsigned int taskToRunNextIndex = taskIndex + 1 < scheduler->numberOfRegisteredTasks ?
-                                           taskIndex + 1 :
+   const unsigned int taskToRunNextIndex = scheduler->taskToRunNextIndex + 1 < scheduler->numberOfRegisteredTasks ?
+                                           scheduler->taskToRunNextIndex + 1 :
                                            0;
    scheduler->taskToRunNextIndex = taskToRunNextIndex;
+
+}
+
+void CooperativeScheduler_Run(CooperativeScheduler* scheduler)
+{
+   assert(scheduler);
+   
+   const unsigned int initialTaskIndex = scheduler->taskToRunNextIndex;
+   while (scheduler->taskState[scheduler->taskToRunNextIndex] == Asleep)
+   {
+      UpdateTaskToRunNext(scheduler);
+      if (scheduler->taskToRunNextIndex == initialTaskIndex)
+         return;
+   }
+
+   const unsigned int taskToRunNowIndex = scheduler->taskToRunNextIndex;
+   scheduler->taskMain[taskToRunNowIndex](scheduler->taskRaw[taskToRunNowIndex]);
+   UpdateTaskToRunNext(scheduler);
 }
 
 void CooperativeScheduler_TaskSleep(CooperativeScheduler* scheduler,
