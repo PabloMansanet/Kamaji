@@ -56,16 +56,35 @@ void CooperativeScheduler_Run(CooperativeScheduler* scheduler)
    UpdateTaskToRunNext(scheduler);
 }
 
-void CooperativeScheduler_TaskSleep(CooperativeScheduler* scheduler,
+static bool SetTaskState(CooperativeScheduler* scheduler,
+                         void* taskRaw,
+                         TaskState state)
+{
+   bool foundATask = false;
+   for (unsigned int i = 0; i < scheduler->numberOfRegisteredTasks; i++)
+   {
+      if (taskRaw == scheduler->taskRaw[i])
+      {
+         foundATask = true;
+         scheduler->taskState[i] = state;
+      }
+   }
+
+   return foundATask;
+}
+
+bool CooperativeScheduler_TaskSleep(CooperativeScheduler* scheduler,
                                     void* taskRaw)
 {
    assert(scheduler);
    assert(taskRaw);
-
-   for (unsigned int i = 0; i < scheduler->numberOfRegisteredTasks; i++)
-   {
-      if (taskRaw == scheduler->taskRaw[i])
-         scheduler->taskState[i] = Asleep;
-   }
+   return SetTaskState(scheduler, taskRaw, Asleep);
 }
 
+bool CooperativeScheduler_TaskWakeUp(CooperativeScheduler* scheduler,
+                                     void* taskRaw)
+{
+   (void) scheduler;
+   (void) taskRaw;
+   return false;
+}

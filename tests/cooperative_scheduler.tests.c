@@ -56,15 +56,21 @@ static void HELPER_register_two_low_priority_tasks(void)
                                      LowPriority);
 }
 
+static void HELPER_register_one_high_priority_task(void)
+{
+
+   CooperativeScheduler_RegisterTask(&testFixture->scheduler,
+                                     MockTask_TaskMain,
+                                     &testFixture->mockTaskHighPriority,
+                                     HighPriority);
+}
+
 void TEST_running_scheduler_with_a_single_task(void)
 {
    FixtureSetUp();
 
    // Given
-   CooperativeScheduler_RegisterTask(&testFixture->scheduler,
-                                     MockTask_TaskMain,
-                                     &testFixture->mockTaskHighPriority,
-                                     HighPriority);
+   HELPER_register_one_high_priority_task();
    assert(testFixture->mockTaskHighPriority.timesTaskMainCalled == 0);
 
    // When
@@ -107,7 +113,6 @@ void TEST_running_scheduler_with_two_same_priority_tasks_cycles_calls(void)
    FixtureTearDown();
 }
 
-
 void TEST_putting_task_to_sleep_stops_it_from_being_scheduled(void)
 {
    FixtureSetUp();
@@ -127,6 +132,28 @@ void TEST_putting_task_to_sleep_stops_it_from_being_scheduled(void)
    CooperativeScheduler_Run(&testFixture->scheduler);
    assert(testFixture->alpha_mockTaskLowPriority.timesTaskMainCalled == 0);
    assert(testFixture->beta_mockTaskLowPriority.timesTaskMainCalled == 2);
+
+   FixtureTearDown();
+}
+
+void TEST_waking_task_up_after_sleep_puts_it_back_on_schedule(void)
+{
+   FixtureSetUp();
+
+   // Given
+   HELPER_register_one_high_priority_task();
+   CooperativeScheduler_TaskSleep(&testFixture->scheduler,
+                                  &testFixture->mockTaskHighPriority);
+   CooperativeScheduler_Run(&testFixture->scheduler);
+   assert(testFixture->mockTaskHighPriority.timesTaskMainCalled == 0);
+
+   // When
+   CooperativeScheduler_TaskWakeUp(&testFixture->scheduler,
+                                   &testFixture->mockTaskHighPriority);
+   CooperativeScheduler_Run(&testFixture->scheduler);
+
+   // Then
+   assert(testFixture->mockTaskHighPriority.timesTaskMainCalled == 1);
 
    FixtureTearDown();
 }

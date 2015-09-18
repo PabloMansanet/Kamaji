@@ -29,7 +29,9 @@ bool CooperativeScheduler_RegisterTask(CooperativeScheduler* scheduler,
                                        void* taskRaw,
                                        unsigned int priority);
 void CooperativeScheduler_Run(CooperativeScheduler* scheduler);
-void CooperativeScheduler_TaskSleep(CooperativeScheduler* scheduler,
+bool CooperativeScheduler_TaskSleep(CooperativeScheduler* scheduler,
                                     void* taskRaw);
+bool CooperativeScheduler_TaskWakeUp(CooperativeScheduler* scheduler,
+                                     void* taskRaw);
 
 #endif //COOPERATIVE_SCHEDULER_H
